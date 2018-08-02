@@ -1,3 +1,5 @@
+/* Need a global cleanup for single/critical/parallel directive and Arinc files*/
+
 #include "Arinc653.h"
 #include "libgomp.h"
 //#include <assert.h>
