@@ -625,6 +625,10 @@ GOMP_parallel_loop_dynamic (void (*fn) (void *), void *data,
 			    unsigned num_threads, long start, long end,
 			    long incr, long chunk_size, unsigned flags)
 {
+	/* Touch A653 */
+	printf("yes! found it \n");
+	/* End touch */
+	
   gomp_parallel_loop_start (fn, data, num_threads, start, end, incr,
 			    GFS_DYNAMIC, chunk_size, flags);
   fn (data);

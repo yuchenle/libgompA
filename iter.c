@@ -147,6 +147,7 @@ gomp_iter_static_next (long *pstart, long *pend)
 bool
 gomp_iter_dynamic_next_locked (long *pstart, long *pend)
 {
+	 
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_work_share *ws = thr->ts.work_share;
   long start, end, chunk, left;
