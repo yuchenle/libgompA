@@ -30,6 +30,7 @@
 #include "libgomp.h"
 
 
+
 /* Initialize the given work share construct from the given arguments.  */
 
 static inline void
@@ -558,6 +559,9 @@ gomp_parallel_loop_start (void (*fn) (void *), void *data,
 			  long incr, enum gomp_schedule_type sched,
 			  long chunk_size, unsigned int flags)
 {
+	/* Touch A653 */
+	printf("entering to the gomp_parallel_loop_start functoin\n");
+	/* End touch */
   struct gomp_team *team;
 
   num_threads = gomp_resolve_num_threads (num_threads, 0);
