@@ -37,6 +37,7 @@ static inline void
 gomp_loop_init (struct gomp_work_share *ws, long start, long end, long incr,
 		enum gomp_schedule_type sched, long chunk_size)
 {
+	
   ws->sched = sched;
   ws->chunk_size = chunk_size;
   /* Canonicalize loops that have zero iterations to ->next == ->end.  */
@@ -99,6 +100,7 @@ static bool
 gomp_loop_static_start (long start, long end, long incr, long chunk_size,
 			long *istart, long *iend)
 {
+	
   struct gomp_thread *thr = gomp_thread ();
 
   thr->ts.static_trip = 0;
@@ -559,9 +561,6 @@ gomp_parallel_loop_start (void (*fn) (void *), void *data,
 			  long incr, enum gomp_schedule_type sched,
 			  long chunk_size, unsigned int flags)
 {
-	/* Touch A653 */
-	printf("entering to the gomp_parallel_loop_start functoin\n");
-	/* End touch */
   struct gomp_team *team;
 
   num_threads = gomp_resolve_num_threads (num_threads, 0);
@@ -575,6 +574,7 @@ GOMP_parallel_loop_static_start (void (*fn) (void *), void *data,
 				 unsigned num_threads, long start, long end,
 				 long incr, long chunk_size)
 {
+	
   gomp_parallel_loop_start (fn, data, num_threads, start, end, incr,
 			    GFS_STATIC, chunk_size, 0);
 }
