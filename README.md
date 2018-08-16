@@ -1,5 +1,5 @@
 # DIRECTLY use this version of libgomp
-1) Download libgomp.so (not uploaded yet, #TODOFOR16/08
+1) Download libgomp.so (not uploaded yet, #TODOFOR16/08)
 2) defien the environment variable LD_LIBRARY_PATH to the location of the downloaded dynamic library
 3) compile your program using OpenMP directives with -fopenmp, things should work
 
