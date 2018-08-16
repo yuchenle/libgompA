@@ -340,6 +340,9 @@ int Arinc_pthread_create (pthread_t *pt, pthread_attr_t *attr, void *fn, void *d
 void Arinc_pthread_exit(void);
 
 _Bool Arinc_compare_and_swap(unsigned long *, unsigned long, unsigned long);
+
+int __attribute__((unused))
+Get_Free_Mutex();
 /*****************From Chenle*****************/
 
 #endif			//define USE_ARINC653

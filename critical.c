@@ -69,6 +69,7 @@ GOMP_critical_name_start (void **pptr)
 
   /* If a mutex fits within the space for a pointer, and is zero initialized,
      then use the pointer space directly.  */
+  
   if (GOMP_MUTEX_INIT_0
       && sizeof (gomp_mutex_t) <= sizeof (void *)
       && __alignof (gomp_mutex_t) <= sizeof (void *))

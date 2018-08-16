@@ -1,6 +1,5 @@
 /* Need a global cleanup for single/critical/parallel directive and Arinc files*/
 
-#include "Arinc653.h"
 #include "libgomp.h"
 //#include <assert.h>
 #include <string.h>
@@ -12,8 +11,10 @@
 
 pthread_mutex_t *EXISTING_MUTEX;									//pointer to existing mutexes
 int *AVAILABLE_MUTEX;												//tab of int representing the availability of mutexes: 1 is available, 0 means already owned by
-pthread_mutex_t SINGLE_MUTEX;	  									//the 2nd mutex of EXISTING_MUTEX is dedicated to single directive
-pthread_mutex_t CRITICAL_MUTEX;										//the 3nd mutex of EXISTING_MUTEX is dedicated to single directive
+pthread_mutex_t SINGLE_MUTEX;	  									//the SINGLE_MUTEX is dedicated to single directive
+pthread_mutex_t CRITICAL_MUTEX;										//the CRITICAL_MUTEX is dedicated to single directive
+
+
 /* Allocate spaces to store mutexes, processes
  * and their attributes and names...*/
 #ifdef LIBGOMP_H
@@ -30,7 +31,11 @@ Arinc_init(void)
 		AVAILABLE_MUTEX[i] = 1;
 		pthread_mutex_init(EXISTING_MUTEX+i,NULL);
 	}
+	
+	SINGLE_MUTEX = EXISTING_MUTEX[Get_Free_Mutex()];				//
+	CRITICAL_MUTEX = EXISTING_MUTEX[Get_Free_Mutex()];				//
 }
+
 
 static void __attribute__((destructor)) 
 Arinc_destructor(void)
@@ -47,6 +52,11 @@ Arinc_destructor(void)
 int Arinc_pthread_create(pthread_t *pt, pthread_attr_t *attr, void *fn, void *data)
 {
 			
+#ifdef BY_PTHREAD 		
+	printf("Arinc_pthread_create: pthread create called\n");
+	return pthread_create(pt, attr, fn, data);
+
+#else
 	/* get thread's priority */
 	struct sched_param sp;
 	int err = pthread_attr_getschedparam(attr,&sp);
@@ -86,12 +96,9 @@ int Arinc_pthread_create(pthread_t *pt, pthread_attr_t *attr, void *fn, void *da
 	//PROCESS_ATTRIBUTES.NAME[0] = '\0'; 		//set the name to empty string
 	//strncat(PROCESS_ATTRIBUTES.NAME, "whats your name", MAX_NAME_LENGTH-1); 
 
-#ifdef BY_PTHREAD 		
-	printf("pthread create called\n");
-	return pthread_create(pt, attr, fn, data);
-
-#else
-	/* call Arinc's CREATE_PROCESS service */
+	printf("Arinc_pthread_create: CREATE_PROCESS called\n");
+	/* perform the Arinc653 service */
+	//CREATE_PROCESS(&PROCESS_ATTRIBUTES, &PROCESS_ID, RETURN_CODE);
 	
 #endif
 }
@@ -102,25 +109,25 @@ void Arinc_pthread_exit()
 #ifdef BY_PTHREAD
 	pthread_exit(NULL);
 #else
-
+	//STOP_SELF();
 #endif
 }
 
 /* Use the first mutex in order to obtain an available mutex
  * return index of available mutex, if any,
  * -1 if no mutex is free*/ 
-static int __attribute__((unused))
+int __attribute__((unused))
 Get_Free_Mutex() 
 {
 	/* start of mutually exclusive region */
 	pthread_mutex_lock(EXISTING_MUTEX);						// wait untill successfully lock the first mutex of the array
 	
-	for(int i=3;i<MUTEX_NUMBER;i++)							//index starts from 3: 0 is used to distribute mutexes, and 1 is for single directive, 2 is for critical directive
+	for(int i=1;i<MUTEX_NUMBER;i++)							//index starts from : 0 is used to distribute mutexes
 	{
 		if(AVAILABLE_MUTEX[i])
 		{
 			AVAILABLE_MUTEX[i] = 0;
-			printf("get_free_mutex has been called and the mutex will be used is %d\n", i);
+			//printf("get_free_mutex has been called and the mutex will be used is %d\n", i);
 			pthread_mutex_unlock(EXISTING_MUTEX);
 			return i;
 		}
