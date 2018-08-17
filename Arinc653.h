@@ -341,6 +341,10 @@ void Arinc_pthread_exit(void);
 
 _Bool Arinc_compare_and_swap(unsigned long *, unsigned long, unsigned long);
 
+void Arinc_mutex_lock ();
+
+void Arinc_mutex_unlock();
+
 int __attribute__((unused))
 Get_Free_Mutex();
 /*****************From Chenle*****************/

@@ -131,11 +131,6 @@ struct htab;
 #include "simple-bar.h"
 #include "ptrlock.h"
 
-/* Touch A653 */
-void Arinc_gomp_mutex_lock ();
-void Arinc_gomp_mutex_unlock();
-/* End touch */
- 
 /* This structure contains the data to control one work-sharing construct,
    either a LOOP (FOR/DO) or a SECTIONS.  */
 

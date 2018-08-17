@@ -168,17 +168,17 @@ _Bool Arinc_compare_and_swap(unsigned long* ptr, unsigned long oldv, unsigned lo
 
 
 /* Arinc critical start*/
-void Arinc_gomp_mutex_lock()
+void Arinc_mutex_lock()
 {
 #ifdef BY_PTHREAD
 	pthread_mutex_lock(&CRITICAL_MUTEX);
 #else
-	
+	//ACQUIRE_MUTEX(MUTEX_ID, TIME_OUT, RETURN_CODE);
 #endif
 }
 
 /* Arinc critical end */
-void Arinc_gomp_mutex_unlock(gomp_mutex_t *mtx)
+void Arinc_mutex_unlock(gomp_mutex_t *mtx)
 {
 #ifdef BY_PTHREAD
 	pthread_mutex_unlock(&CRITICAL_MUTEX);

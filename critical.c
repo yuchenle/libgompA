@@ -40,7 +40,7 @@ GOMP_critical_start (void)
 
 /* Touch A653 */
 #ifdef USE_ARINC653
-  Arinc_gomp_mutex_lock ();
+  Arinc_mutex_lock ();
 #else
 	gomp_mutex_lock(&default_lock);
 #endif
@@ -52,7 +52,7 @@ GOMP_critical_end (void)
 {
 /* Touch A653 */
 #ifdef USE_ARINC653
-	Arinc_gomp_mutex_unlock();
+	Arinc_mutex_unlock();
 #else
   gomp_mutex_unlock (&default_lock);
 #endif
