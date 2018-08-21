@@ -32,10 +32,9 @@
 #include "gomp-constants.h"
 
 /* Touch A653 */
-#include <errno.h>
 #ifdef USE_ARINC653
-bool done = false;
-static pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+#include <errno.h>
+static bool END = false;
 #endif
 /* End touch */
 
@@ -301,18 +300,18 @@ GOMP_task (void (*fn) (void *), void *data, void (*cpyfn) (void *, void *),
 /* Touch A653 */
 #ifdef USE_ARINC653
 	/* In order to print only one error msg */
-	pthread_mutex_lock(&mtx);
-	if(!done)
+	Arinc_mutex_lock();
+	if(!END)
 	{
-		done = true;
+		END = true;
 		errno = EBADRQC;
 		perror("No 'task' directive authorized in Arinc mode");		
-		pthread_mutex_unlock(&mtx);
+		Arinc_mutex_unlock();
 		exit(EXIT_FAILURE);
 	}
-	pthread_mutex_unlock(&mtx);
+	Arinc_mutex_unlock();
 	return;
-#else
+#endif
 /* End touch */
 
   struct gomp_thread *thr = gomp_thread ();
@@ -485,7 +484,6 @@ GOMP_task (void (*fn) (void *), void *data, void (*cpyfn) (void *, void *),
       if (do_wake)
 	gomp_team_barrier_wake (&team->barrier, 1);
     }
-#endif   					//end ifdef USE_ARINC653
 }
 
 ialias (GOMP_taskgroup_start)

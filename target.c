@@ -45,6 +45,12 @@
 #include "plugin-suffix.h"
 #endif
 
+/* Touch Arinc653 */
+#ifdef USE_ARINC653
+static bool END = false;
+#endif
+/* End touch */
+
 static void gomp_target_init (void);
 
 /* The whole initialization code for offloading plugins is only run one.  */
@@ -1576,6 +1582,22 @@ GOMP_target (int device, void (*fn) (void *), const void *unused,
 	     size_t mapnum, void **hostaddrs, size_t *sizes,
 	     unsigned char *kinds)
 {
+/* Touch Arinc653 */
+#ifdef USE_ARINC653
+	/* print only one error msg */
+	Arinc_mutex_lock();
+	if(!END)
+	{
+		END = true;
+		errno = EBADRQC;
+		perror("No 'target' directive allowed in Arinc layer");
+		Arinc_mutex_unlock();
+		exit(EXIT_FAILURE);
+	}
+	Arinc_mutex_unlock();
+#endif
+/* End Touch */
+
   struct gomp_device_descr *devicep = resolve_device (device);
 
   void *fn_addr;
@@ -1622,6 +1644,23 @@ GOMP_target_ext (int device, void (*fn) (void *), size_t mapnum,
 		 void **hostaddrs, size_t *sizes, unsigned short *kinds,
 		 unsigned int flags, void **depend, void **args)
 {
+	
+/* Touch Arinc653 */
+#ifdef USE_ARINC653
+	/* print only one error msg */
+	Arinc_mutex_lock();
+	if(!END)
+	{
+		END = true;
+		errno = EBADRQC;
+		perror("No 'target' directive allowed in Arinc layer");
+		Arinc_mutex_unlock();
+		exit(EXIT_FAILURE);
+	}
+	Arinc_mutex_unlock();
+#endif
+/* End Touch */
+
   struct gomp_device_descr *devicep = resolve_device (device);
   size_t tgt_align = 0, tgt_size = 0;
   bool fpc_done = false;
