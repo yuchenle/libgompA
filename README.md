@@ -1,3 +1,17 @@
+###########################################
+###		Chenle YU		###
+###	part of IRT Internship		###
+###	24 / 08 / 2018 			###
+###########################################
+
+#What are these files?
+This folder is a modified libgomp library of gcc's OpenMP implementation.
+Not all files are modified, but only single.c, parallel.c, team.c, and critical.c.
+Arinc653.c and Arinc653.h are newly created files, trying to make OpenMP runnable on 
+a Arinc OS. One can try the layer by following the steps below.
+
+
+
 # DIRECTLY use this version of libgomp
 1) Download libgomp.so (not uploaded yet, #TODOFOR16/08)
 2) defien the environment variable LD_LIBRARY_PATH to the location of the downloaded dynamic library
