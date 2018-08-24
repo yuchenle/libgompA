@@ -1,0 +1,27 @@
+###########################################
+###By Chenle YU, 24/08/2018		###
+####contact: yuchenle18@gmail.com	###
+###########################################
+
+
+-> Why not using make to automatize the test process (inside "examples")?
+
+The complete test will involve both original libgomp.so.1 and Arinc layer libgomp.so.1 to compare their results and since their location are machine dependent, then I intentionally not want to provide both to perform tests "only"
+
+-> How to perform those tests?
+
+Please set the "LD_LIBRARY_PATH" environment variable to the Arinc libgomp.so.1's path.
+One can use "locate libgomp.so.1" to find its place.
+Note that in this archive, only 64bit libgomp.so.1 is provided, and it is not 32 bit compliant. In order to perform tests on 32 bits applications, the download of gcc source code and rebuild the compiler with "--enable-multilib" option at configure phase is necessary
+
+-> How to make sure that the Arinc layer is correctly working?
+
+One can compare the output of the Arinc libgomp.so.1 and gcc's libgomp.so.1 to make sure whether the layer is working correctly or not
+
+The expected behaviour of parallel is the limitation of thread number from the first "parallel" directive, and some test msg, the rest is delegated to the original library
+
+The task and target constructs are forbidden, not yet implemented, and their parallelism phylosiphy might not be compliant to the RTOS's.
+
+Single and critical are implemented, but they just delegate to pthread_mutex_lock, unlock...
+
+
